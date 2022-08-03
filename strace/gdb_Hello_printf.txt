@@ -1,0 +1,76 @@
+# cat Hello.c
+
+"
+#include <stdio.h>
+
+void main(void)
+{
+printf("Hello World\n");
+}
+
+"
+
+gcc -o Hello Hello.c
+
+gdb ./Hello
+0x0000555555554510 in puts@plt ()
+-> 0x00007ffff7e43684 in puts () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa56 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e41077 in _IO_file_doallocate () from /lib64/libc.so.6
+-> 0x00007ffff7e59451 in malloc () from /lib64/libc.so.6
+-> 0x00007ffff7f2661b in _dl_addr () from /lib64/libc.so.6  // this function will run too many instructions(about 72000-73000 instructions)!!! Other function only  1 - 500 instructions.
+-> 0x00007ffff7e55962 in ptmalloc_init.part () from /lib64/libc.so.6
+-> 0x00007ffff7fe5280 in __tunable_get_val () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7e59454 in malloc () from /lib64/libc.so.6
+-> 0x00007ffff7e57817 in _int_malloc () from /lib64/libc.so.6
+-> 0x00007ffff7e5685d in sysmalloc () from /lib64/libc.so.6
+-> 0x00007ffff7f52a9e in __memset_avx2_unaligned_erms () from /lib64/libc.so.6
+-> 0x00007ffff7e57484 in _int_malloc () from /lib64/libc.so.6
+-> 0x00007ffff7e59513 in malloc () from /lib64/libc.so.6
+-> 0x00007ffff7e4e5fd in __GI__IO_file_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e50d27 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa68 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e50d39 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa80 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e50d45 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa49 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e50d56 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa59 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e50d27 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa68 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e50d39 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa80 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e50d45 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa49 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e50d56 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa59 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e50db4 in _IO_default_xsputn () from /lib64/libc.so.6
+-> 0x00007ffff7e43759 in puts () from /lib64/libc.so.6
+-> 0x00007ffff7e506c3 in __overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e4fa72 in __GI__IO_file_overflow () from /lib64/libc.so.6
+-> 0x00007ffff7e4f602 in __GI__IO_do_write () from /lib64/libc.so.6
+-> 0x00007ffff7e4de71 in _IO_file_write@@GLIBC_2.2.5 () from /lib64/libc.so.6
+-> 0x00007ffff7ed18a0 in write () from /lib64/libc.so.6
+
+...
+
+...
+
+
+
+Dump of assembler code for function write:
+0x00007ffff7ed1880 <+0>: f3 0f 1e fa endbr64
+0x00007ffff7ed1884 <+4>: 48 8d 05 05 18 0e 00 lea 0xe1805(%rip),%rax # 0x7ffff7fb3090 <__libc_multiple_threads>
+0x00007ffff7ed188b <+11>: 8b 00 mov (%rax),%eax
+0x00007ffff7ed188d <+13>: 85 c0 test %eax,%eax
+0x00007ffff7ed188f <+15>: 75 1f jne 0x7ffff7ed18b0 <write+48>
+0x00007ffff7ed1891 <+17>: b8 01 00 00 00 mov $0x1,%eax
+0x00007ffff7ed1896 <+22>: 0f 05 syscall                                                       // So printf used "syscall" and then printf the "Hello World"
+0x00007ffff7ed1898 <+24>: 0f 1f 84 00 00 00 00 00 nopl 0x0(%rax,%rax,1)
+=> 0x00007ffff7ed18a0 <+32>: 48 3d 00 f0 ff ff cmp $0xfffffffffffff000,%rax
+0x00007ffff7ed18a6 <+38>: 77 58 ja 0x7ffff7ed1900 <write+128>
+0x00007ffff7ed18a8 <+40>: c3 retq
+0x00007ffff7ed18a9 <+41>: 0f 1f 80 00 00 00 00 nopl 0x0(%rax)
+0x00007ffff7ed18b0 <+48>: 41 54 push %r12
+0x00007ffff7ed18b2 <+50>: 49 89 d4 mov %rdx,%r12
+...

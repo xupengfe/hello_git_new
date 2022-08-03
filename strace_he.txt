@@ -1,0 +1,6 @@
+execve("./he", ["./he"], 0x7ffc161916d0 /* 51 vars */) = 0
+[ Process PID=2301075 runs in 32 bit mode. ]
+write(1, "Hello World\n", 12Hello World
+)           = 12
+exit(0)                                 = ?
++++ exited with 0 +++

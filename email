@@ -1,0 +1,40 @@
+#!/bin/bash
+
+files=$(ls 0*.patch)
+
+for file in $files; do
+  result=""
+  num=""
+  check=""
+
+  num=$(echo "$file" | cut -d '-' -f 1)
+  result=$(ls ${num}* | wc -l)
+
+  [[ "$result" == "1" ]] || {
+    check=$(ls -1 ${num}*)
+    echo "$file: $num files not only 1: $check"
+  exit
+  }
+
+	[[ -f /tmp/$file ]] && diff /tmp/$file $file && {
+		echo "The same patch /tmp/$file already exists"
+		exit
+	}
+done
+
+echo "git send-email -q --confirm=never --no-signed-off-by-cc --no-chain-reply-to --to=xxx $files"
+git send-email	-q \
+  --confirm=never \
+  --no-signed-off-by-cc \
+  --no-chain-reply-to \
+  --to="linux-drivers-review <linux-drivers-review@eclists.intel.com>"\
+  --cc="Pengfei Xu <pengfei.xu@intel.com>" \
+  --cc="Heng Su <heng.su@intel.com>" \
+  --cc="Kasten Robert A <robert.a.kasten@intel.com>" \
+  --cc="Shankar Ravi V <ravi.v.shankar@intel.com>" \
+  --cc="Yu Yu-cheng <yu-cheng.yu@intel.com>" \
+  --cc="Yu Fenghua <fenghua.yu@intel.com>" \
+  --cc="Hansen Dave <dave.hansen@intel.com>" \
+  $files
+
+mv -f $files /tmp

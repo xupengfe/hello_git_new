@@ -1,0 +1,195 @@
+# cat hello_sys.c
+
+"
+#include <string.h>
+#include <sys/syscall.h>
+#include <unistd.h>
+
+int main(void)
+{
+char *msg = "Hello world\n";
+syscall(SYS_write, 1, msg, strlen(msg));
+
+return 0;
+}
+
+"
+
+gcc -o hello_sys hello_sys.c
+
+
+
+gdb ./hello_sys
+0x0000000000401030 in strlen@plt ()
+-> 0x00007ffff7fe2960 in _dl_runtime_resolve_xsavec () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fda7a4 in _dl_fixup () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd5f1e in _dl_lookup_symbol_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd5086 in do_lookup_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fed18a in strcmp () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd55ee in do_lookup_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fed170 in strcmp () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd5649 in do_lookup_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd6038 in _dl_lookup_symbol_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fda890 in _dl_fixup () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7e5dfc6 in strlen_ifunc () from /lib64/libc.so.6
+-> 0x00007ffff7fda8c2 in _dl_fixup () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fe2a01 in _dl_runtime_resolve_xsavec () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7f4f569 in __strlen_avx2 () from /lib64/libc.so.6
+0x000000000040118e in main ()
+-> 0x0000000000401040 in syscall@plt ()
+-> 0x00007ffff7fe2964 in _dl_runtime_resolve_xsavec () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fda7b6 in _dl_fixup () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd5f15 in _dl_lookup_symbol_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd5082 in do_lookup_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fed185 in strcmp () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd55e3 in do_lookup_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fed1d4 in strcmp () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd5d54 in do_lookup_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fd602e in _dl_lookup_symbol_x () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fda88b in _dl_fixup () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fe29de in _dl_runtime_resolve_xsavec () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7edc590 in syscall () from /lib64/libc.so.6
+
+// then return 0 to exit.
+
+-> 0x0000000000401198 in main ()
+-> 0x00007ffff7de1322 in __libc_start_main () from /lib64/libc.so.6
+-> 0x00007ffff7e03b0d in exit () from /lib64/libc.so.6
+-> 0x00007ffff7e03884 in __run_exit_handlers () from /lib64/libc.so.6
+-> 0x00007ffff7e042a4 in __call_tls_dtors () from /lib64/libc.so.6
+-> 0x00007ffff7e038b8 in __run_exit_handlers () from /lib64/libc.so.6
+-> 0x00007ffff7fdb344 in _dl_fini () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fcb107 in rtld_lock_default_lock_recursive () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fdb3b7 in _dl_fini () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fe306e in _dl_sort_maps () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7ff10f0 in memset () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fe30d1 in _dl_sort_maps () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7ff10fb in memset () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fe3246 in _dl_sort_maps () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7ff10f8 in memset () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fe324d in _dl_sort_maps () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7fdb485 in _dl_fini () from /lib64/ld-linux-x86-64.so.2
+-> 0x0000000000401124 in __do_global_dtors_aux ()
+-> 0x00000000004010b0 in deregister_tm_clones ()
+-> 0x0000000000401136 in __do_global_dtors_aux ()
+-> 0x00007ffff7fdb538 in _dl_fini () from /lib64/ld-linux-x86-64.so.2
+-> 0x00007ffff7e03915 in __run_exit_handlers () from /lib64/libc.so.6
+-> 0x00007ffff7e51bae in _IO_cleanup () from /lib64/libc.so.6
+-> 0x00007ffff7e518b1 in _IO_flush_all_lockp () from /lib64/libc.so.6
+-> 0x00007ffff7e51c01 in _IO_cleanup () from /lib64/libc.so.6
+-> 0x00007ffff7ea4cc0 in _exit () from /lib64/libc.so.6
+
+# gdb ./hello_sys    // found syscall was called as below.
+
+(gdb) i r
+rax 0x1 1
+rbx 0x0 0
+rcx 0xc 12
+rdx 0xc 12
+rsi 0x402010 4202512
+rdi 0x1 1
+rbp 0x7fffffffd740 0x7fffffffd740
+rsp 0x7fffffffd728 0x7fffffffd728
+r8 0x7ffff7faf820 140737353807904
+r9 0x7fffffffd820 140737488345120
+r10 0x7ffff7faf820 140737353807904
+r11 0x7ffff7edc580 140737352942976
+r12 0x401060 4198496
+r13 0x7fffffffd820 140737488345120
+r14 0x0 0
+r15 0x0 0
+rip 0x7ffff7edc59b 0x7ffff7edc59b <syscall+27>
+eflags 0x206 [ PF IF ]
+cs 0x33 51
+ss 0x2b 43
+ds 0x0 0
+es 0x0 0
+fs 0x0 0
+gs 0x0 0
+k0 0x0 0
+k1 0x0 0
+k2 0x0 0
+k3 0x0 0
+k4 0x0 0
+k5 0x0 0
+k6 0x0 0
+k7 0x0 0
+(gdb) disas /rm
+Dump of assembler code for function syscall:
+0x00007ffff7edc580 <+0>: f3 0f 1e fa endbr64
+0x00007ffff7edc584 <+4>: 48 89 f8 mov %rdi,%rax
+0x00007ffff7edc587 <+7>: 48 89 f7 mov %rsi,%rdi
+0x00007ffff7edc58a <+10>: 48 89 d6 mov %rdx,%rsi
+0x00007ffff7edc58d <+13>: 48 89 ca mov %rcx,%rdx
+0x00007ffff7edc590 <+16>: 4d 89 c2 mov %r8,%r10
+0x00007ffff7edc593 <+19>: 4d 89 c8 mov %r9,%r8
+0x00007ffff7edc596 <+22>: 4c 8b 4c 24 08 mov 0x8(%rsp),%r9
+=> 0x00007ffff7edc59b <+27>: 0f 05 syscall
+0x00007ffff7edc59d <+29>: 48 3d 01 f0 ff ff cmp $0xfffffffffffff001,%rax
+0x00007ffff7edc5a3 <+35>: 73 01 jae 0x7ffff7edc5a6 <syscall+38>
+0x00007ffff7edc5a5 <+37>: c3 retq
+0x00007ffff7edc5a6 <+38>: 48 8b 0d d3 08 0d 00 mov 0xd08d3(%rip),%rcx # 0x7ffff7face80
+0x00007ffff7edc5ad <+45>: f7 d8 neg %eax
+0x00007ffff7edc5af <+47>: 64 89 01 mov %eax,%fs:(%rcx)
+0x00007ffff7edc5b2 <+50>: 48 83 c8 ff or $0xffffffffffffffff,%rax
+0x00007ffff7edc5b6 <+54>: c3 retq
+End of assembler dump.
+
+
+
+(gdb) si 1
+Hello world
+0x00007ffff7edc59d in syscall () from /lib64/libc.so.6
+(gdb) disas /rm
+Dump of assembler code for function syscall:
+0x00007ffff7edc580 <+0>: f3 0f 1e fa endbr64
+0x00007ffff7edc584 <+4>: 48 89 f8 mov %rdi,%rax
+0x00007ffff7edc587 <+7>: 48 89 f7 mov %rsi,%rdi
+0x00007ffff7edc58a <+10>: 48 89 d6 mov %rdx,%rsi
+0x00007ffff7edc58d <+13>: 48 89 ca mov %rcx,%rdx
+0x00007ffff7edc590 <+16>: 4d 89 c2 mov %r8,%r10
+0x00007ffff7edc593 <+19>: 4d 89 c8 mov %r9,%r8
+0x00007ffff7edc596 <+22>: 4c 8b 4c 24 08 mov 0x8(%rsp),%r9
+0x00007ffff7edc59b <+27>: 0f 05 syscall
+=> 0x00007ffff7edc59d <+29>: 48 3d 01 f0 ff ff cmp $0xfffffffffffff001,%rax
+0x00007ffff7edc5a3 <+35>: 73 01 jae 0x7ffff7edc5a6 <syscall+38>
+0x00007ffff7edc5a5 <+37>: c3 retq
+0x00007ffff7edc5a6 <+38>: 48 8b 0d d3 08 0d 00 mov 0xd08d3(%rip),%rcx # 0x7ffff7face80
+0x00007ffff7edc5ad <+45>: f7 d8 neg %eax
+0x00007ffff7edc5af <+47>: 64 89 01 mov %eax,%fs:(%rcx)
+0x00007ffff7edc5b2 <+50>: 48 83 c8 ff or $0xffffffffffffffff,%rax
+0x00007ffff7edc5b6 <+54>: c3 retq
+End of assembler dump.
+(gdb) i r
+rax 0xc 12
+rbx 0x0 0
+rcx 0x7ffff7edc59d 140737352943005
+rdx 0xc 12
+rsi 0x402010 4202512
+rdi 0x1 1
+rbp 0x7fffffffd740 0x7fffffffd740
+rsp 0x7fffffffd728 0x7fffffffd728
+r8 0x7ffff7faf820 140737353807904
+r9 0x7fffffffd820 140737488345120
+r10 0x7ffff7faf820 140737353807904
+r11 0x306 774
+r12 0x401060 4198496
+r13 0x7fffffffd820 140737488345120
+r14 0x0 0
+r15 0x0 0
+rip 0x7ffff7edc59d 0x7ffff7edc59d <syscall+29>
+eflags 0x206 [ PF IF ]
+cs 0x33 51
+ss 0x2b 43
+ds 0x0 0
+es 0x0 0
+fs 0x0 0
+gs 0x0 0
+k0 0x0 0
+k1 0x0 0
+k2 0x0 0
+k3 0x0 0
+k4 0x0 0
+k5 0x0 0
+k6 0x0 0
+k7 0x0 0

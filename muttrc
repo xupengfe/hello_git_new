@@ -1,0 +1,25 @@
+set my_pass="your_passwd"
+set realname="Name"
+set from="email_addr@.com"
+set folder = "imaps://outlook.intel.com:993"
+set imap_pass =$my_pass
+set use_from=yes
+set spoolfile="imaps://xupengfe@outlook.intel.com/Inbox/"
+set record="imaps://xupengfe@outlook.intel.com/Sent Items"
+set postponed="imaps://xupengfe@outlook.intel.com/Drafts"
+set smtp_url="smtp://smtp.intel.com"
+set header_cache=${HOME}/.mutt_cache
+set sort=threads
+set sort_browser=date
+set sort_aux=reverse-last-date-received
+set askcc
+set timeout=30
+
+auto_view text/html
+alternative_order text/plain text/enriched text/html
+
+# Change preferred text editor
+set editor=vim
+set visual=vim
+set edit_headers=yes
+set date_format="%F at %T %Z"
