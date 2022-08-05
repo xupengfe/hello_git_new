@@ -4,8 +4,8 @@
 
 readonly SUMMARY="summary"
 readonly RESULT="results"
-readonly FEATURE="features"
-readonly CASE="cases"
+readonly FEATURE="Components"
+readonly CASE="Cases"
 readonly COMMENT="comments"
 readonly SUMMARY_CSV="kselftest_summary.csv"
 
