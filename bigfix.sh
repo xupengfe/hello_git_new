@@ -12,9 +12,14 @@ bigfix_exist=$(ls ${bigfix}* 2>/dev/null)
 echo "wget http://xenvgt.sh.intel.com/download/iterp/bigfix_non_windows-BESClient_Labs_Prod-TLS.sh"
 wget http://xenvgt.sh.intel.com/download/iterp/bigfix_non_windows-BESClient_Labs_Prod-TLS.sh
 
+echo "wget http://xpf.sh.intel.com/tools/bigfix_centos.sh"
+wget http://xpf.sh.intel.com/tools/bigfix_centos.sh
+
 echo "chmod +x bigfix_non_windows-BESClient_Labs_Prod-TLS.sh"
 chmod +x bigfix_non_windows-BESClient_Labs_Prod-TLS.sh
+chmod +x bigfix_centos.sh
 sleep 1
 
-echo "./bigfix_non_windows-BESClient_Labs_Prod-TLS.sh"
-./bigfix_non_windows-BESClient_Labs_Prod-TLS.sh
+echo "./bigfix_centos.sh"
+./bigfix_centos.sh
+echo "If not centOS please execute ./bigfix_non_windows-BESClient_Labs_Prod-TLS.sh"
