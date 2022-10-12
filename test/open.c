@@ -2,7 +2,9 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
- 
+
+#define  A  0100
+
 int main()
 {
     int filedesc = open("testfile.txt", O_WRONLY | O_CREAT | O_TRUNC,
@@ -14,6 +16,7 @@ int main()
     printf("Open successfully\n");
      close(filedesc);
 
+    printf("O_CREAT:0x%x, A(define with 0100):0x%x\n", O_CREAT, A);
     int fd = open("1.txt", O_RDONLY);  //O_RDONLY | O_CREAT  should successfully
         if (fd < 0) {
              printf("open 1.txt failed\n");
