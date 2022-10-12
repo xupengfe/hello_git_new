@@ -14,7 +14,7 @@ int main()
     printf("Open successfully\n");
      close(filedesc);
 
-    int fd = open("1.txt", O_RDONLY);
+    int fd = open("1.txt", O_RDONLY);  //O_RDONLY | O_CREAT  should successfully
         if (fd < 0) {
              printf("open 1.txt failed\n");
              return 1;
