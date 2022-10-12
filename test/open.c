@@ -12,13 +12,20 @@ int main()
         return 1;
     }
     printf("Open successfully\n");
- 
+     close(filedesc);
+
+    int fd = open("1.txt", O_RDONLY);
+        if (fd < 0) {
+             printf("open 1.txt failed\n");
+             return 1;
+        }
+    printf("Open successfully\n");
+    close(fd);
     //if(write(filedesc,"This will be output to testfile.txt\n", 36) != 36)
     //{
     //    write(2,"There was an error writing to testfile.txt\n");    // strictly not an error, it is allowable for fewer characters than requested to be written.
     //    return 1;
     //}
-    close(filedesc);
 
     return 0;
 }
