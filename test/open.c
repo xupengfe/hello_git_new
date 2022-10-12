@@ -7,22 +7,25 @@
 
 int main()
 {
-    int filedesc = open("testfile.txt", O_WRONLY | O_CREAT | O_TRUNC,
+    char *name1 = "testfile.txt";
+    char *name2 ="1.txt";
+    int filedesc = open(name1, O_WRONLY | O_CREAT | O_TRUNC,
                S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     if(filedesc < 0) {
-        printf("open testfile.txt failed\n");
+        printf("open testfile.txt failed:%d\n", filedesc);
         return 1;
     }
-    printf("Open successfully\n");
+    printf("Open %s successfully:%d\n", name1, filedesc);
      close(filedesc);
 
     printf("O_CREAT:0x%x, A(define with 0100):0x%x\n", O_CREAT, A);
-    int fd = open("1.txt", O_RDONLY);  //O_RDONLY | O_CREAT  should successfully
+    int fd = open(name2, O_RDONLY, 0xffffffff);  //O_RDONLY | O_CREAT  should successfully
         if (fd < 0) {
-             printf("open 1.txt failed\n");
+             printf("open 1.txt failed:%d\n", fd);
              return 1;
         }
-    printf("Open successfully\n");
+    printf("Open 1.txt successfully:%d\n", fd);
+    sleep(100);
     close(fd);
     //if(write(filedesc,"This will be output to testfile.txt\n", 36) != 36)
     //{
