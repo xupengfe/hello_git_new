@@ -1,4 +1,4 @@
-BIN = getcpu
+BIN = getcpu set_area
 
 all: $(BIN)
 
