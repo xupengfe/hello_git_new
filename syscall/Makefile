@@ -1,4 +1,4 @@
-BIN = getcpu set_area
+BIN = getcpu set_area set_socket
 
 all: $(BIN)
 

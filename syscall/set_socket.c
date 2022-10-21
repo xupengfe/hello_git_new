@@ -26,8 +26,8 @@ int main() {
 
         if (fd < 0)
                 printf("socket failed:%d\n", fd);
-        printf("IPPROTO_IP:%d, IPT_SO_SET_REPLACE:%d\n",
-                IPPROTO_IP, IPT_SO_SET_REPLACE);
+        printf("fd:%d, IPPROTO_IP:%d, IPT_SO_SET_REPLACE:%d\n",
+                fd, IPPROTO_IP, IPT_SO_SET_REPLACE);
 
         ret = setsockopt(fd, IPPROTO_IP, IPT_SO_SET_REPLACE, buffer, 1);
 
