@@ -23,9 +23,9 @@ int main(void)
 
 	stat("/", &buf);
 	dev_num = buf.st_dev;
-	printf("dev_num:%lx, buf:%p, buf[0]:%lx, buf[1]:%lx, ino:%lx\n",
+	printf("dev_num:%lx, buf:%p, buf[0]:%lx, buf[1]:%lx, ino:%lx, size:%lx\n",
 		dev_num, &buf, *((unsigned long *)&buf), *((unsigned long *)(&buf + 1)),
-		buf.st_ino);
+		buf.st_ino, buf.st_size);
 
 	ret = syscall(__NR_ustat, (unsigned int)dev_num, &ubuf);
 
