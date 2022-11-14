@@ -24,8 +24,8 @@ check_log() {
     echo "==========================="
     echo "The ${i} time test:"
 
-    echo "(./"$APP" >$P_LOG) >& $O_LOG"
-    (./"$APP" >$P_LOG) >& $O_LOG
+    echo "("$APP" >$P_LOG) >& $O_LOG"
+    ("$APP" >$P_LOG) >& $O_LOG
     check_p=$(cat $P_LOG | grep -i "$KEYWORD")
     check_o=$(cat $O_LOG | grep -i "$KEYWORD")
     [[ -z "$check_p" ]] || {
