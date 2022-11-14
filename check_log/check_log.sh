@@ -30,6 +30,9 @@ check_log() {
     ("$APP" >$P_LOG) >& $O_LOG
     check_p=$(cat $P_LOG | grep -i "$KEYWORD")
     check_o=$(cat $O_LOG | grep -i "$KEYWORD")
+    cp -rf $P_LOG ${P_LOG}_bak
+    cp -rf $O_LOG ${O_LOG}_bak
+
     [[ -z "$check_p" ]] || {
       echo "Find $KEYWORD in $P_LOG!" | tee $CHECK_LOG
       echo "Please check $CHECK_LOG"
