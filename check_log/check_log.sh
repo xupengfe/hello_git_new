@@ -14,22 +14,26 @@ check_log() {
   local check_p=""
   local check_o=""
 
+  echo "Clean $P_LOG $O_LOG first before test!"
+  cat /dev/null > $P_LOG
+  cat /dev/null > $O_LOG
 
   for ((i=1;;i++)); do
     check_p=""
     check_o=""
     echo "==========================="
     echo "The ${i} time test:"
+
     echo "(./"$APP" >$P_LOG) >& $O_LOG"
     (./"$APP" >$P_LOG) >& $O_LOG
     check_p=$(cat $P_LOG | grep -i "$KEYWORD")
     check_o=$(cat $O_LOG | grep -i "$KEYWORD")
-    [[ -z "$check_p" ]] && {
+    [[ -z "$check_p" ]] || {
       echo "Find $KEYWORD in $P_LOG!"
       exit 0
     }
 
-    [[ -z "$check_o" ]] && {
+    [[ -z "$check_o" ]] || {
       echo "Find $KEYWORD in $O_LOG!"
       exit 0
     }
