@@ -9,6 +9,8 @@ P_LOG="/root/p.log"
 # Child process log or all log
 O_LOG="/root/output.log"
 
+CHECK_LOG="/root/checklog.txt"
+
 check_log() {
   local i=1
   local check_p=""
@@ -21,23 +23,25 @@ check_log() {
   for ((i=1;;i++)); do
     check_p=""
     check_o=""
-    echo "==========================="
-    echo "The ${i} time test:"
+    echo "===========================" | tee $CHECK_LOG
+    echo "The ${i} time test:" | tee $CHECK_LOG
 
-    echo "$APP >$P_LOG >& $O_LOG"
+    echo "$APP >$P_LOG >& $O_LOG" | tee $CHECK_LOG
     "$APP" >$P_LOG >& $O_LOG
     check_p=$(cat $P_LOG | grep -i "$KEYWORD")
     check_o=$(cat $O_LOG | grep -i "$KEYWORD")
     [[ -z "$check_p" ]] || {
-      echo "Find $KEYWORD in $P_LOG!"
+      echo "Find $KEYWORD in $P_LOG!" | tee $CHECK_LOG
+      echo "Please check $CHECK_LOG"
       exit 0
     }
 
     [[ -z "$check_o" ]] || {
-      echo "Find $KEYWORD in $O_LOG!"
+      echo "Find $KEYWORD in $O_LOG!" | tee $CHECK_LOG
+      echo "Please check $CHECK_LOG"
       exit 0
     }
-    echo "No $KEYWORD find in $i round."
+    echo "No $KEYWORD find in $i round." | tee $CHECK_LOG
   done
 }
 
