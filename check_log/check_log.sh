@@ -45,4 +45,5 @@ check_log() {
   done
 }
 
+echo "Make sure the app you used is the absolute path or ./app !!!"
 check_log
