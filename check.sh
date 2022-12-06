@@ -3,7 +3,8 @@ file_name=$1
 parm=$2
 current_path=""
 check=""
-code_path="/usr/src/otc_intel_next-linux"
+code_path="/home/intel-next/"
+#code_path="/home/code/os.linux.intelnext.kernel/"
 
 cd "$code_path" || {
   echo "access $code_path failed"
@@ -12,13 +13,29 @@ cd "$code_path" || {
 
 #check=$(echo "$file_name" | grep "/")
 #if [[ -z "$check" ]]; then
-  ./scripts/checkpatch.pl -f "$file_name"
+  echo "./scripts/checkpatch.pl -f --strict --codespell $file_name"
+  ./scripts/checkpatch.pl -f --strict --codespell "$file_name"
 #else
 #  current_path=$(pwd)
 #  ./scripts/checkpatch.pl -f "$current_path/$file_name"
 #fi
 
-if [[ "$parm" == 'a' ]]; then
-  echo
-  ./scripts/checkpatch.pl "$file_name"
-fi
+#if [[ "$parm" == 'a' ]]; then
+#  echo "parm:a"
+#  echo "./scripts/checkpatch.pl $file_name"
+#  ./scripts/checkpatch.pl "$file_name"
+#fi
+
+case $parm in
+  a)
+    echo "./scripts/checkpatch.pl $file_name"
+    ./scripts/checkpatch.pl "$file_name"
+    ;;
+  s)
+    echo "./scripts/checkpatch.pl --strict $file_name"
+    ./scripts/checkpatch.pl --strict "$file_name"
+    ;;
+  *)
+    echo "invalid parm:$parm"
+    ;;
+esac
