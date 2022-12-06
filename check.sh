@@ -3,7 +3,7 @@ file_name=$1
 parm=$2
 current_path=""
 check=""
-code_path="/home/intel-next/"
+code_path="/home/code/lkml/"
 #code_path="/home/code/os.linux.intelnext.kernel/"
 
 cd "$code_path" || {
