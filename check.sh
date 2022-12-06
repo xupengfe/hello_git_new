@@ -6,6 +6,7 @@ check=""
 code_path="/home/code/lkml/"
 #code_path="/home/code/os.linux.intelnext.kernel/"
 
+echo "cd $code_path"
 cd "$code_path" || {
   echo "access $code_path failed"
   return 2
