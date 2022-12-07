@@ -31,3 +31,6 @@ nmcli connection modify virbr0 ipv4.method auto
 
 echo "nmcli connection up virbr0"
 nmcli connection up virbr0
+
+echo "nmcli networking off; nmcli networking on"
+nmcli networking off; nmcli networking on
