@@ -34,3 +34,6 @@ nmcli connection up virbr0
 
 echo "nmcli networking off; nmcli networking on"
 nmcli networking off; nmcli networking on
+
+echo "nmcli connection down virbr0; nmcli connection up $eth"
+nmcli connection down virbr0; nmcli connection up $eth
