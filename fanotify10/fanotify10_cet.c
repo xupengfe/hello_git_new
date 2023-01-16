@@ -112,6 +112,7 @@ static int max_file_multi;
 /* It's from arch/x86/include/uapi/asm/prctl.h file. */
 #define ARCH_CET_ENABLE		0x5001
 #define ARCH_CET_DISABLE	0x5002
+#define ARCH_SHSTK_STATUS	0x5005
 #define CET_SHSTK		(1ULL <<  0)
 
 /*
@@ -688,10 +689,9 @@ static void cleanup_fanotify_groups(void)
 	unsigned int i, p;
 
 	if (ARCH_PRCTL(ARCH_CET_DISABLE, CET_SHSTK))
-		tst_res(TINFO, "[SKIP]\tCould not disable Shadow stack.\n");
+		printf("[SKIP]\tCould not disable Shadow stack.\n");
 	else
-		tst_res(TINFO, "[OK]\tDisable Shadow stack successfully.\n");
-
+		printf("[OK]\tDisable Shadow stack successfully.\n");
 	for (p = 0; p < num_classes; p++) {
 		for (i = 0; i < GROUPS_PER_PRIO; i++) {
 			if (fd_notify[p][i] > 0)
@@ -802,37 +802,62 @@ static void test_fanotify(unsigned int n)
 	unsigned int p, i;
 	struct fanotify_event_metadata *event;
 	int event_count;
+	long retrn = 0;
+	unsigned long feature = 0;
 
 	tst_res(TINFO, "Test #%d: %s", n, tc->tname);
 
 	if (ARCH_PRCTL(ARCH_CET_ENABLE, CET_SHSTK))
-		tst_res(TINFO, "[SKIP]\tCould not enable Shadow stack.\n");
+		printf("[SKIP]\tCould not enable Shadow stack.\n");
 	else
-		tst_res(TINFO, "[OK]\tEnable Shadow stack successfully.\n");
+		printf("[OK]\tEnable Shadow stack successfully.\n");
+
+	retrn = ARCH_PRCTL(ARCH_SHSTK_STATUS, &feature);
+	tst_res(TINFO, "SHSTK status:ret:%ld, feature:0x%lx\n", retrn, feature);
 
 	if (exec_events_unsupported && tc->expected_mask_with_ignore & FAN_OPEN_EXEC) {
 		tst_res(TCONF, "FAN_OPEN_EXEC not supported in kernel?");
+	if (ARCH_PRCTL(ARCH_CET_DISABLE, CET_SHSTK))
+		printf("[SKIP]\tCould not disable Shadow stack.\n");
+	else
+		printf("[OK]\tDisable Shadow stack successfully.\n");
 		return;
 	}
 
 	if (filesystem_mark_unsupported && tc->mark_type == FANOTIFY_FILESYSTEM) {
 		tst_res(TCONF, "FAN_MARK_FILESYSTEM not supported in kernel?");
+	if (ARCH_PRCTL(ARCH_CET_DISABLE, CET_SHSTK))
+		printf("[SKIP]\tCould not disable Shadow stack.\n");
+	else
+		printf("[OK]\tDisable Shadow stack successfully.\n");
 		return;
 	}
 
 	if (evictable_mark_unsupported && tc->ignore_mark_type == FANOTIFY_EVICTABLE) {
 		tst_res(TCONF, "FAN_MARK_EVICTABLE not supported in kernel?");
+	if (ARCH_PRCTL(ARCH_CET_DISABLE, CET_SHSTK))
+		printf("[SKIP]\tCould not disable Shadow stack.\n");
+	else
+		printf("[OK]\tDisable Shadow stack successfully.\n");
 		return;
 	}
 
 	if (ignore_mark_unsupported && tst_variant) {
 		tst_res(TCONF, "FAN_MARK_IGNORE not supported in kernel?");
+	if (ARCH_PRCTL(ARCH_CET_DISABLE, CET_SHSTK))
+		printf("[SKIP]\tCould not disable Shadow stack.\n");
+	else
+		printf("[OK]\tDisable Shadow stack successfully.\n");
 		return;
 	}
 
 	if (tc->ignored_flags & FAN_EVENT_ON_CHILD && tst_kvercmp(5, 9, 0) < 0) {
 		tst_res(TCONF, "ignored mask in combination with flag FAN_EVENT_ON_CHILD"
 				" has undefined behavior on kernel < 5.9");
+	if (ARCH_PRCTL(ARCH_CET_DISABLE, CET_SHSTK))
+		printf("[SKIP]\tCould not disable Shadow stack.\n");
+	else
+		printf("[OK]\tDisable Shadow stack successfully.\n");
 		return;
 	}
 
@@ -840,6 +865,10 @@ static void test_fanotify(unsigned int n)
 			!tst_variant && tc->mark_type == FANOTIFY_SUBDIR) {
 		tst_res(TCONF, "flags FAN_EVENT_ON_CHILD and FAN_ONDIR do not take effect"
 				" with legacy FAN_MARK_IGNORED_MASK");
+	if (ARCH_PRCTL(ARCH_CET_DISABLE, CET_SHSTK))
+		printf("[SKIP]\tCould not disable Shadow stack.\n");
+	else
+		printf("[OK]\tDisable Shadow stack successfully.\n");
 		return;
 	}
 
@@ -967,6 +996,10 @@ static void cleanup(void)
 {
 	int i;
 
+	if (ARCH_PRCTL(ARCH_CET_DISABLE, CET_SHSTK))
+		printf("[SKIP]\tCould not disable Shadow stack.\n");
+	else
+		printf("[OK]\tDisable Shadow stack successfully.\n");
 	cleanup_fanotify_groups();
 
 	if (bind_mount_created)
