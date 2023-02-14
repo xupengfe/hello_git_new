@@ -27,5 +27,7 @@ echo "PID_LOAD:$PID_LOAD, PID_CAT:$PID_CAT"
 
 echo "sleep 5"
 sleep 5
-echo "kill -9 $PID_CAT"
-kill -9 "$PID_CAT"
+for cpu in $PID_CAT; do
+  echo "kill -9 $cpu"
+  kill -9 "$cpu"
+done
