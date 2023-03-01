@@ -49,6 +49,17 @@ check_case_num() {
   fi
 }
 
+# Change "not ok" -> "FAIL", then "ok" -> "PASS"
+change_result() {
+  local file=$1
+
+  echo "sed -i s/'not ok'/'FAIL'/g $file"
+  sed -i s/"not ok"/"FAIL"/g "$file"
+
+  echo "sed -i s/'ok'/'PASS'/g $file"
+  sed -i s/"ok"/"PASS"/g "$file"
+}
+
 summarize_kself_log() {
   local results=""
   local result=""
@@ -62,10 +73,11 @@ summarize_kself_log() {
 
   cat "$KSELF_LOG" | grep "ok" | grep -v "^#" | grep -v "Binary" > "$SUMMARY"
   cat "$SUMMARY" | awk -F " selftests:" '{print $1}' > $RESULT
+  change_result "$RESULT"
   cat "$SUMMARY" | awk -F ": " '{print $2}' > $FEATURE
   cat "$SUMMARY" | awk -F ": " '{print $3}' | cut -d '#' -f 1 > $CASE
   cat "$SUMMARY" | awk -F ": " '{print $3}' | awk -F "#" '{print $2}' > $COMMENT
-  echo "kselftest-list,result,feature,case,comments" > $SUMMARY_CSV
+  echo "kselftest-list,Result,Feature,Case,Comments" > $SUMMARY_CSV
 
   max_num=$(cat $RESULT | wc -l)
   for ((num=1; num<=max_num; num++)); do
