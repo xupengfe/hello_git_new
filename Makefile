@@ -1,6 +1,6 @@
 BIN = ax cpuid cpu_feature hello_ins hello_sys \
         uname uname_sys t he cpu_num cmd he Hello_World t_32 hh tc_32 tc \
-        Hello sleep simple
+        Hello sleep simple t_hello
 
 all: $(BIN)
 
@@ -41,6 +41,10 @@ hh:
 
 simple:
 	gcc -fcf-protection=full -o simple simple.c
+
+t_hello:
+	as -o t_hello.o t_hello.S
+	ld -o t_hello t_hello.o
 
 clean:
 	rm -f $(BIN) *.o *.out
