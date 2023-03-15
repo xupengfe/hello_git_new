@@ -68,6 +68,10 @@ _start:
 	syscall
 	add     $8, %rsp    # restore sp
 
-	movl $1, %eax
-	movl $0, %ebx
-	int $0x80
+	mov     $60, %rax   # syscall sys_exit num:60
+	mov     $1,  %rdi   # fd with 1, standard output
+	syscall             # syscall instruction is the new way for 64bit OS
+
+#	movl $1, %eax
+#	movl $0, %ebx
+#	int $0x80         # int $0x80 is old interrupt way to call syscall
