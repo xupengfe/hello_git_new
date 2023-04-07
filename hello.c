@@ -2,18 +2,8 @@
 #include <unistd.h>
 #include <string.h>
 
-void greeting()
-
+void main(void)
 {
 	char *msg = "Hello world\n";
-
 	write(1, msg, strlen(msg));
-}
-
-
-
-void main()
-
-{
-	greeting();
 }
