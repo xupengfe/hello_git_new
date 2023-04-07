@@ -15,4 +15,4 @@ _start:
     int $0x80
     movl $1, %eax    # Call SYS_EXIT:1 in 32bit
     movl $0, %ebx    # push arguments
-    int $0x80        # initiate
+    int $0x80        # interrupt to syscall
