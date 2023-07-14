@@ -29,6 +29,14 @@ if [[ -f /etc/opt/BESClient/actionsite.afxm ]]; then
    BESMAST=`grep -i $BESROOT /etc/opt/BESClient/actionsite.afxm`
 fi
 
+usage() {
+  cat <<__EOF
+  usage: ./${0##*/}  [Linux_OS_type][-h]
+  Linux_OS_type: Rhel for Redhat|CentOS, Ubuntu for Ubuntu
+  -h  show This
+__EOF
+}
+
 #Check if BES Client is already installed and running
 is_besinstalled () {
    if [[ -f /etc/init.d/besclient ]]; then
@@ -114,7 +122,8 @@ else
 fi
 
 # these variables are used to determine which version of the BigFix agent should be downloaded
-URLVERSION=10.0.4.32
+#URLVERSION=10.0.4.32
+URLVERSION=10.0.8.37
 URLMAJORMINOR=`echo $URLVERSION | awk '/./ {gsub(/\./, " "); print $1 $2}'`
 
 # check for x32bit or x64bit OS
@@ -143,6 +152,23 @@ elif is_lnxdistro suse && command_exists rpm; then
    LNXDISTRO=Suse
    BESVER=`rpm -qi BESAgent 2>/dev/null |grep Version |awk '{print $3}'`
 fi
+
+[[ -z "$1" ]] || {
+   if [[ "$1" == "-h" ]]; then
+      usage
+      exit 1
+   elif [[ "$1" == "Ubuntu" ]]; then
+      LNXDISTRO="$1"
+   elif [[ "$1" == "Rhel" ]]; then
+      LNXDISTRO="$1"
+   else
+      echo "parm:$1 is not Ubuntu or Rhel"
+      usage
+      exit 1
+   fi
+}
+
+echo "Set LNXDISTRO:$1"
 
 printf "Check if BESClient v$URLVERSION is already installed for Labs, and running\n\n"
 is_besinstalled
@@ -212,7 +238,8 @@ if is_lnxdistro debian && command_exists dpkg; then
 fi
 
 # if Ubuntu
-if is_lnxdistro ubuntu && command_exists dpkg; then
+#if is_lnxdistro ubuntu && command_exists dpkg; then
+if [[ "$LNXDISTRO" == "Ubuntu" ]]; then
    if [[ $OSBIT == x64 ]]; then
       URLBITS=amd64
    else
@@ -224,7 +251,8 @@ if is_lnxdistro ubuntu && command_exists dpkg; then
 fi # END_IF Debian (dpkg)
 
 # if Red Hat or CentOS or OEL or Amazon Linux
-if is_lnxdistro red && command_exists rpm; then
+#if is_lnxdistro red && command_exists rpm; then
+if [[ "$LNXDISTRO" == "Rhel" ]]; then
    if [[ $OSBIT == x64 ]]; then
       URLBITS=x86_64
    else
@@ -435,4 +463,6 @@ else
    printf "\nLinux Client Settings processing complete\n\n"
    printf "Exiting Installer...\n\n"
 fi
+
+usage
 fw_rule
