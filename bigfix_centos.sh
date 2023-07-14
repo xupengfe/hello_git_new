@@ -153,6 +153,9 @@ elif is_lnxdistro suse && command_exists rpm; then
    BESVER=`rpm -qi BESAgent 2>/dev/null |grep Version |awk '{print $3}'`
 fi
 
+# Set Rhel for CentOS as default
+LNXDISTRO="Rhel"
+
 [[ -z "$1" ]] || {
    if [[ "$1" == "-h" ]]; then
       usage
