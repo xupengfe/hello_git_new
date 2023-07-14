@@ -22,4 +22,4 @@ sleep 1
 
 echo "./bigfix_centos.sh"
 ./bigfix_centos.sh
-echo "If not centOS please execute ./bigfix_non_windows-BESClient_Labs_Prod-TLS.sh"
+echo "If not centOS please execute ./bigfix_centos.sh Ubuntu"
