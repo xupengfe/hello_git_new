@@ -4,16 +4,11 @@ EMAIL_FILE=$1
 FROM_FORMAT="From: "
 TO_FORMAT="To: "
 EMAIL_FROM=""
-EMAIL_TOS=""
 EMAIL_TO=""
 RESULT=""
 
 EMAIL_FROM=$(grep "$FROM_FORMAT"  "$EMAIL_FILE" | awk -F "$FROM_FORMAT" '{print $2}' | head -n 1)
-EMAIL_TOS=$(grep "$TO_FORMAT"  "$EMAIL_FILE" | awk -F "$TO_FORMAT" '{print $2}')
-
-for EMAIL_TO in $EMAIL_TOS; do
-  echo "EMAIL_TO:$EMAIL_TO"
-done
+EMAIL_TO=$(grep "$TO_FORMAT"  "$EMAIL_FILE" | awk -F "$TO_FORMAT" '{print $2}' | head -n 1)
 
 echo "Will send email file:$EMAIL_FILE from $EMAIL_FROM to $EMAIL_TO"
 
