@@ -33,8 +33,8 @@ case $parm in
     ./scripts/checkpatch.pl "$file_name"
     ;;
   s)
-    echo "./scripts/checkpatch.pl --strict $file_name"
-    ./scripts/checkpatch.pl --strict "$file_name"
+    echo "./scripts/checkpatch.pl --strict --codespell $file_name"
+    ./scripts/checkpatch.pl --strict --codespell "$file_name"
     ;;
   *)
     echo "invalid parm:$parm"
