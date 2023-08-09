@@ -18,6 +18,7 @@ if [[ -z "$IS_CENT9" ]]; then
   echo "It's not CentOS 9"
 else
   echo "It's CentOS9"
+  yum install -y initscripts.x86_64
   CHECK_INITSCRIPT=$(rpm -qa | grep initscripts)
   [[ -z ""$CHECK_INITSCRIPT ]] && {
     yum install -y initscripts.x86_64
