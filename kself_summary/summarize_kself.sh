@@ -71,7 +71,7 @@ summarize_kself_log() {
   local max_num=""
   local line=""
 
-  cat "$KSELF_LOG" | grep "ok" | grep -v "^#" | grep -v "Binary" > "$SUMMARY"
+  cat "$KSELF_LOG" | grep -a -v "^#" | grep "ok" | grep -v "Binary" > "$SUMMARY"
   cat "$SUMMARY" | awk -F " selftests:" '{print $1}' > $RESULT
   change_result "$RESULT"
   cat "$SUMMARY" | awk -F ": " '{print $2}' > $FEATURE
