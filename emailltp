@@ -31,6 +31,7 @@ git send-email	-q \
   --cc="Pengfei Xu <pengfei.xu@intel.com>" \
   --cc="Heng Su <heng.su@intel.com>" \
   --cc="chrubis@suse.cz" \
+  --cc="pvorel@suse.cz" \
   $files
 
 mv -f $files /tmp
