@@ -3,7 +3,8 @@ file_name=$1
 parm=$2
 current_path=""
 check=""
-code_path="/home/code/lkml/"
+#code_path="/home/code/lkml/"
+code_path="/home/code/os.linux.intelnext.kernel"
 #code_path="/home/code/os.linux.intelnext.kernel/"
 
 echo "cd $code_path"
@@ -14,7 +15,7 @@ cd "$code_path" || {
 
 #check=$(echo "$file_name" | grep "/")
 #if [[ -z "$check" ]]; then
-  echo "./scripts/checkpatch.pl -f --strict --codespell $file_name"
+  echo "./scripts/checkpatch.pl --strict --codespell --no-tree $file_name"
   ./scripts/checkpatch.pl -f --strict --codespell "$file_name"
 #else
 #  current_path=$(pwd)
