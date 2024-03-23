@@ -41,3 +41,6 @@ case $parm in
     echo "invalid parm:$parm"
     ;;
 esac
+
+echo -e "codespell $file_name \n"
+codespell "$file_name"
