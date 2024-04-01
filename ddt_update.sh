@@ -60,9 +60,10 @@ update_maintain_ddt() {
 # 3  data base to LFE
   echo "data base to LFE by lfe sync:"
   do_cmd "cd $TOOLS_PATH"
-  do_cmd "git pull"
+  do_cmd "git fetch origin"
 
-  do_cmd "./lfe sync"
+  # Need to manually to do lfe sync
+  #do_cmd "./lfe sync"
 
   git_diff=$(git diff)
   if [[ -z "$git_diff" ]]; then
@@ -71,6 +72,9 @@ update_maintain_ddt() {
     echo -e "Submodule clkv or binaries no update, do nothing.\n"
   fi
   echo "If want to check data base connection problem, use: jz get projects"
+
+  echo "Next need to do lfe sync for data base to LFE."
+  echo "${TOOLS_PATH}/lfe sync"
   echo "Update DDT done!"
 }
 
