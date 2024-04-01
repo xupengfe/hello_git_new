@@ -25,10 +25,9 @@ do_cmd() {
 update_maintain_ddt() {
   local git_diff=""
 
-  echo "cd $DDT_PATH"
   do_cmd "cd $DDT_PATH"
 
-  # Update lkvs and binary submodule
+  # 1 Update lkvs and binary submodule
   echo "Update lkvs and binary submodule:"
   #echo "git submodule"
   #git submodule
@@ -41,14 +40,14 @@ update_maintain_ddt() {
 
   git_diff=$(git diff)
   if [[ -z "$git_diff" ]]; then
-    echo -e "Submodule clkv or binaries udpated, need a commit to push!\n"
+    echo -e "[WARN] Submodule clkv or binaries udpated, need a commit to push!!!!\n"
   else
     echo -e "Submodule clkv or binaries no update, do nothing.\n"
   fi
 
 
-# ddt-sync to data base
-  echo "ddt-sync to data base:"
+# 2 ddt-sync to data base
+  echo "ddt-sync ddt to data base:"
 
   do_cmd "ddt-sync scenarios"
 
@@ -58,15 +57,21 @@ update_maintain_ddt() {
 
   echo -e "ddt-sync to data base done!\n"
 
-# data base to LFE
+# 3  data base to LFE
   echo "data base to LFE by lfe sync:"
   do_cmd "cd $TOOLS_PATH"
   do_cmd "git pull"
 
   do_cmd "./lfe sync"
+
+  git_diff=$(git diff)
+  if [[ -z "$git_diff" ]]; then
+    echo -e "[WARN] Submodule clkv or binaries udpated, need a commit to push!!!!\n"
+  else
+    echo -e "Submodule clkv or binaries no update, do nothing.\n"
+  fi
   echo "If want to check data base connection problem, use: jz get projects"
   echo "Update DDT done!"
-
 }
 
 update_maintain_ddt
