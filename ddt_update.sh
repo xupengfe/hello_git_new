@@ -39,7 +39,7 @@ update_maintain_ddt() {
   do_cmd "git submodule update --remote utils/binaries"
 
   git_diff=$(git diff)
-  if [[ -z "$git_diff" ]]; then
+  if [[ -n "$git_diff" ]]; then
     echo -e "[WARN] Submodule clkv or binaries udpated, need a commit to push!!!!\n"
   else
     echo -e "Submodule clkv or binaries no update, do nothing.\n"
@@ -66,7 +66,7 @@ update_maintain_ddt() {
   #do_cmd "./lfe sync"
 
   git_diff=$(git diff)
-  if [[ -z "$git_diff" ]]; then
+  if [[ -n "$git_diff" ]]; then
     echo -e "[WARN] Submodule clkv or binaries udpated, need a commit to push!!!!\n"
   else
     echo -e "Submodule clkv or binaries no update, do nothing.\n"
