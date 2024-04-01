@@ -64,6 +64,7 @@ update_maintain_ddt() {
   do_cmd "git pull"
 
   do_cmd "./lfe sync"
+  echo "If want to check data base connection problem, use: jz get projects"
   echo "Update DDT done!"
 
 }
