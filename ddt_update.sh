@@ -24,8 +24,18 @@ do_cmd() {
 
 update_maintain_ddt() {
   local git_diff=""
+  local ret=""
 
   do_cmd "cd $DDT_PATH"
+  echo "git pull"
+  git pull
+  ret=$?
+  git log --oneline | head -n 1
+  [[ "$ret" -eq 0 ]] || {
+    echo "[WARN] git pull failed with ret:$ret in $DDT_PATH, please check and try again!"
+    echo "Could not update DDT to latest and exit"
+    exit 1
+  }
 
   # 1 Update lkvs and binary submodule
   echo "Update lkvs and binary submodule:"
