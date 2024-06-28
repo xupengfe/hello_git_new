@@ -1,0 +1,15 @@
+#!/bin/bash
+
+version=""
+[[ $1 =~ ^v[1-9]* ]] && {
+	version="$1"
+	shift
+}
+
+repo="PATCH "
+
+repo="Accel-config] [PATCH "
+
+echo "git format-patch --cover-letter --thread=shallow -M --subject-prefix=\"${repo}${version}\" \"${@:--1}\""
+files=$(git format-patch --cover-letter --thread=shallow -M --subject-prefix="${repo}${version}" "${@:--1}")
+echo "files:$files"
