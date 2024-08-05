@@ -12,5 +12,5 @@ PASSWD=""
 #  echo "FILE:$FILE is not a gz file, will not upload into haydn.sh.intel.com:/root/Data/DDT/packages/weekly/centos/9/"
 #fi
 
-  echo "curl -uxupengfe:$PASSWD -T $FILE -O://ubit-artifactory-sh.intel.com/artifactory/clkv-infra-sh-local/builds/monthly/centos/9/$FILE"
-  curl -uxupengfe:"$PASSWD" -T "$FILE" -O "https://ubit-artifactory-sh.intel.com/artifactory/clkv-infra-sh-local/builds/monthly/centos/9/$FILE"
+  echo "curl -uxupengfe:$PASSWD -T $FILE https://ubit-artifactory-sh.intel.com/artifactory/clkv-infra-sh-local/builds/monthly/centos/9/$FILE"
+  curl -uxupengfe:"$PASSWD" -T "$FILE" "https://ubit-artifactory-sh.intel.com/artifactory/clkv-infra-sh-local/builds/monthly/centos/9/$FILE"

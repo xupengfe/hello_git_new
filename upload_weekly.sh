@@ -13,5 +13,6 @@ else
 
 fi
 
-  echo "curl -uxupengfe:$PASSWD -T $FILE -O https://ubit-artifactory-sh.intel.com/artifactory/clkv-infra-sh-local/builds/weekly/centos/9/$FILE"
-  curl -uxupengfe:"$PASSWD" -T "$FILE" -O "https://ubit-artifactory-sh.intel.com/artifactory/clkv-infra-sh-local/builds/weekly/centos/9/$FILE"
+  # Remove -O for download
+  echo "curl -uxupengfe:$PASSWD -T $FILE https://ubit-artifactory-sh.intel.com/artifactory/clkv-infra-sh-local/builds/weekly/centos/9/$FILE"
+  curl -uxupengfe:"$PASSWD" -T "$FILE" "https://ubit-artifactory-sh.intel.com/artifactory/clkv-infra-sh-local/builds/weekly/centos/9/$FILE"
