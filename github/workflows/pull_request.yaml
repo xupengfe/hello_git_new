@@ -1,0 +1,66 @@
+name: Pull Request Check
+permissions: read-all
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    branches:
+      - main
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  #workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  CodeCheck:
+    # The type of runner that the job will run on
+    runs-on: [self-hosted]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Steup Environment
+        run: |
+          sudo yum install -y python3 python3-pip python3-ply git shellcheck perl codespell
+          sudo mkdir -p /usr/share/codespell
+          sudo wget https://raw.githubusercontent.com/codespell-project/codespell/master/codespell_lib/data/dictionary.txt -O /usr/share/codespell/dictionary.txt
+          sudo wget https://raw.githubusercontent.com/torvalds/linux/master/scripts/spelling.txt -O /usr/bin/spelling.txt
+          sudo wget https://raw.githubusercontent.com/torvalds/linux/master/scripts/const_structs.checkpatch -O /usr/bin/const_structs.checkpatch
+          sudo wget https://raw.githubusercontent.com/torvalds/linux/master/scripts/checkpatch.pl -O /bin/checkpatch.pl
+          sudo chmod +x /bin/checkpatch.pl
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set base ref for push event
+        if: github.event_name == 'push'
+        run: echo "BASE_REF=origin/main" >> $GITHUB_ENV
+      - name: Set base ref for pull request event
+        if: github.event_name == 'pull_request'
+        run: echo "BASE_REF=origin/${{ github.base_ref }}" >> $GITHUB_ENV
+      - name: Print GitHub Context
+        run: |
+          echo "github.event_name: ${{ github.event_name }}"
+          echo "env.BASE_REF: ${{ env.BASE_REF }}"
+          echo "SHA: ${{ github.sha }}"
+      # Runs a single command using the runners shell
+      # ./.github/scripts/code_check.py "origin/main" "09f46131dfa72ab9fee67e6d495bad70251ebc35""
+      - name: Check Code format
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          ./.github/scripts/code_check.py "${{ env.BASE_REF }}" "${{ github.sha }}"
+      - name: Push job code format check
+        if: github.event_name == 'push'
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          PREV_SHA=$(git rev-parse HEAD^1)
+          ./.github/scripts/code_check.py "$PREV_SHA" "${{ github.sha }}"
+      - name: Report job status
+        run: echo "Job's status is ${{ job.status }}."
