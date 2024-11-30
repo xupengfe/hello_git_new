@@ -12,7 +12,7 @@ _start:
 	syscall
 
 	mov     $60, %rax   # syscall sys_exit num:60 in 64bit
-	mov     $1,  %rdi   # fd with 1, standard output
+	mov     $1,  %rdi   # ret with 1
 	syscall             # syscall instruction in 64bit
 
 #	movl $1, %eax
